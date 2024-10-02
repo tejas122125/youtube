@@ -1,17 +1,19 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { Stack, Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 export default function TabLayout() {
 
 
 
-    return (
+  return (
+    <Stack>
+      <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+      <Stack.Screen name="home" options={{ headerShown: false }} />
+    </Stack>
 
-      <Stack>
-        <Stack.Screen name="home" options={{ headerShown: false }} />
-      </Stack>
 
-    );
-  
+  );
+
 }
