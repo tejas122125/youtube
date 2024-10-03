@@ -5,9 +5,10 @@ import * as WebBrowser from 'expo-web-browser'
 import { useOAuth } from "@clerk/clerk-expo";
 import GoogleButton from "../../components/GoogleButton"
 import { removeItem } from "@/utils/asyncStorage"
-import { scale, verticalScale } from "react-native-size-matters"
 import { images } from "@/constants/indes"
 import { useCallback, useEffect, useState } from "react";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
 
 WebBrowser.maybeCompleteAuthSession()
 

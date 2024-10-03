@@ -1,5 +1,8 @@
+import 'react-native-gesture-handler'
+
 import { Redirect } from "expo-router"
 import { useEffect, useState } from "react"
+
 import { GetItem } from '../utils/asyncStorage'
 import { View } from "react-native-reanimated/lib/typescript/Animated"
 import { useAuth } from "@clerk/clerk-expo"
