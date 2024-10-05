@@ -9,7 +9,6 @@ import { useNavigation } from "expo-router";
 
 const Home = () => {
     const navigation = useNavigation()
-
     const { isSignedIn, user } = useUser()
     const imageUrl = user?.imageUrl
     console.log(user?.imageUrl);
