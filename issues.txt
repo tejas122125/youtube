@@ -1,0 +1,3 @@
+fix the setloading in the register page while coming back from sign in page
+add zustand store 
+remove onboarding from tabs
