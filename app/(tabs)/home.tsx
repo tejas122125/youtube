@@ -1,36 +1,64 @@
 import { SafeAreaView } from "react-native-safe-area-context"
-import { Button, Text } from "react-native"
+import { Button, Modal, Text, TextInput } from "react-native"
 import { View, Image } from "react-native"
 import { useUser } from "@clerk/clerk-expo"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import { DrawerActions } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { images } from "@/constants/indes";
+import { useState } from "react";
 
 
 const Home = () => {
-    const navigation = useNavigation()
     const { isSignedIn, user } = useUser()
     const imageUrl = user?.imageUrl
     console.log(user?.imageUrl);
     const firstName = user?.firstName
-
-    const onToggle = () => {
-        navigation.dispatch(DrawerActions.openDrawer)
+    const [searchModal, setSearchModal] = useState<boolean>(false)
+    const toggleModal = () => {
+        setSearchModal((prev) => {
+            return !prev;
+        })
     }
+    const showModal = () => {
+        setSearchModal(true)
+    }
+    const searchBox = () => {
+        return (
+            <View className="flex-1 bg-red-200 w-full" style={{ height: scale(300) }}>
+
+            </View>
+        )
+    }
+
     return (
-        <SafeAreaView className="bg-green-200 flex-1">
-            <Button title="open" onPress={onToggle} />
-            <View className='w-full bg-blue-200  flex-row items-center justify-between '>
-                <View className=" flex flex-row justify-center items-center bg-red-200 " style={{ padding: scale(4) }}>
-                    <Image style={{ height: scale(40), width: scale(40), margin: scale(10) }} resizeMode="contain" className="rounded-full" source={{ uri: imageUrl }} />
-                    <Text className="" style={{ marginBottom: scale(10) }}>Hi {firstName}!</Text>
-                </View>
-                <View className="flex flex-row-reverse items-center justify-center p-2 bg-green-300 ">
+        <View style={{ flex: 1, backgroundColor: 'green', flexDirection: 'column' }} >
+
+            <Image source={images.need2} className="w-full" style={{ height: scale(70) }} resizeMode="stretch" />
+            <View style={{ width: '100%', gap: scale(15), flexDirection: 'row', justifyContent: 'flex-start', alignContent: 'center', padding: scale(10) }}>
+                <Image source={{ uri: imageUrl }} className="rounded-full" style={{ width: scale(60), height: scale(60) }} />
+                <View style={{ backgroundColor: 'white', width: '100%',padding:scale(4), marginRight: scale(10), flexDirection: 'column', gap: scale(4), justifyContent: 'center', alignContent: "center" }}>
+                    <Text>
+                        Code Story With Mik
+                    </Text>
+                    <Text>
+                        67.7k Subscribers
+                    </Text>
+                    <Text>
+                        445 Videos
+                    </Text>
+               
 
                 </View>
             </View>
 
-        </SafeAreaView>
+
+
+            <View className="rounded-l-full rounded-r-full" style={{ backgroundColor: '#f7f0f0', flexDirection: 'row', padding: scale(4), alignItems: "center", justifyContent: 'flex-start', width: '100%', height: scale(60), gap: scale(10) }}>
+                <Image source={images.search} style={{ height: scale(30), width: scale(30), resizeMode: 'contain', }} />
+                <TextInput placeholder="search" clearButtonMode="always" className="flex-1 p-2 text-lg" />
+            </View>
+        </View>
+
     )
 }
 
