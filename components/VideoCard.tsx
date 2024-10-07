@@ -3,27 +3,10 @@ import { Image, Text, View, StyleSheet } from "react-native"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 const VideoCard = (item: any) => {
-    console.log(item);
+    // console.log(item);
     const videoTitle = item.item.item.videoTitle
     const videoPlaylist = item.item.item.playlistName
-    //     return (
-    //         <View  style={{width:'100%', padding:scale(10),borderRadius:scale(10), marginBottom:scale(6),flexDirection:'row', justifyContent:'space-between', alignItems:'center' ,backgroundColor:'white', gap:scale(15)}}>
-    //             <Image source={images.google} style={{height:scale(60), width:scale(60),borderRadius:scale(25),alignSelf:'flex-start' }}/>
-    //             <View style={{flex:1, width:'100%', backgroundColor:'green',height:'100%', padding:scale(6), flexDirection:'column',}}>
-    //                 <Text>
-    //                     monu
-    //                 </Text>
-    //                 <Text>
-    //                     monu
-    //                 </Text>
-    //                 <Text>
-    //                     monu
-    //                 </Text>
-    //             </View>
-
-    //         </View>
-    //     )
-    // }
+   
     return (
         <View style={styles.cardContainer}>
             {/* Image on the left side */}
@@ -36,7 +19,6 @@ const VideoCard = (item: any) => {
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{videoTitle}</Text>
                 <Text style={styles.description}>This is a sample description for the card component, demonstrating the use of layout with flexbox in React Native.</Text>
-                <Text style={styles.subText}>{videoPlaylist}</Text>
             </View>
         </View>
     );
@@ -45,38 +27,41 @@ const VideoCard = (item: any) => {
 const styles = StyleSheet.create({
     cardContainer: {
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        backgroundColor: '#0a113b',
         borderRadius: 8,
         elevation: 5, // Adds shadow for Android
         shadowColor: '#000', // Adds shadow for iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        padding: scale(10),
-        margin: scale(10),
+        padding: scale(6),
+        margin: scale(6),
         alignItems: 'center',
         width: "100%", // Adjust card width relative to screen size
         alignSelf: 'center',
         justifyContent: 'space-between',
-        overflow: 'scroll'
+        overflow: 'hidden'
     },
     image: {
-        width: scale(60), // Fixed width for the image
-        height: scale(80), // Fixed height for the image
+        width: scale(150), // Fixed width for the image
+        height: scale(110), // Fixed height for the image
         borderRadius: scale(8),
-        marginRight: scale(10),
+        marginRight: scale(6),
+        resizeMode:'cover'
     },
     textContainer: {
-        flex: 1, // Takes remaining space
+        flex: 1,
+        paddingRight:scale(10) // Takes remaining space
     },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        color:'#cb544a'
     },
     description: {
         fontSize: 14,
-        color: '#666',
+        color: '#f79890',
         marginBottom: 5,
     },
     subText: {

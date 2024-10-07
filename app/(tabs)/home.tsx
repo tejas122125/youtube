@@ -10,7 +10,7 @@ import { Searchbar } from "react-native-paper";
 import { fetchData } from "@/lib/fetchData";
 import { searchType } from "@/types/searchResponse";
 import VideoCard from "@/components/VideoCard";
-
+import filter from 'lodash.filter'
 const Home = () => {
     const { isSignedIn, user } = useUser()
     const imageUrl = user?.imageUrl
@@ -20,7 +20,7 @@ const Home = () => {
     const [loading, setLoading] = useState<Boolean>(false)
     const [data, setData] = useState<any>()
     const [error, setError] = useState("")
-    const [fullData, setFullData] = useState("")
+    const [fullData, setFullData] = useState<any>()
     const toggleModal = () => {
         setSearchModal((prev) => {
             return !prev;
@@ -40,7 +40,7 @@ const Home = () => {
         try {
             const response = await fetchData(search)
             // console.log("response id ", response);
-            
+
             setData(response)
             setLoading(false)
 
@@ -48,13 +48,33 @@ const Home = () => {
             setError(String(error))
         }
     }
+    const contains = ({ videoTitle, playlistName }: { videoTitle: string, playlistName: string }, query: string) => {
+        if (videoTitle.includes(query) || playlistName.includes(query)) {
+            return true
+
+        }
+        else {
+            return false
+        }
+    }
+    const handleSearch = (query: string) => {
+        setSearchQuery(query)
+        const formattedQuery = query.toLowerCase();
+        const filterData = filter(fullData, (video) => {
+            return contains(video, formattedQuery)
+        })
+        // console.log(filterData);
+        
+        setData(filterData)
+    }
     useEffect(() => {
         setLoading(true)
         searchData(searchQuery)
-        console.log("data is ");
+        setFullData(data)
+        console.log("data is ",data);
 
 
-    }, [data])
+    }, [])
 
 
 
@@ -79,12 +99,14 @@ const Home = () => {
 
                 </View>
             </View>
-            <View style={{ width: '100%', flex: 1, flexDirection: 'column', backgroundColor: 'purple', justifyContent: "center", alignItems: 'center', gap: scale(10), paddingHorizontal: scale(6) }}>
+            <View style={{ width: '100%', flex: 1, flexDirection: 'column', backgroundColor: '#0a113b', justifyContent: "center", alignItems: 'center', gap: scale(10), paddingHorizontal: scale(6) }}>
                 <View style={{ width: '100%', padding: scale(6), borderBottomColor: '#1f0303', borderBottomWidth: 2 }}>
                     <Searchbar
                         autoCapitalize='none' autoCorrect={false} clearButtonMode="always"
                         placeholder="Search"
-                        onChangeText={setSearchQuery}
+                        onChangeText={(text) => {
+                            handleSearch(text)
+                        }}
                         value={searchQuery}
                     />
                 </View>
