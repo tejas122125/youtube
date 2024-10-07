@@ -5,7 +5,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { useOAuth } from "@clerk/clerk-expo";
 import GoogleButton from "../../components/GoogleButton"
 import { removeItem } from "@/utils/asyncStorage"
-import { images } from "@/constants/indes"
+import { images } from "@/constants"
 import { useCallback, useEffect, useState } from "react";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 

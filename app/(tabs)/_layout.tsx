@@ -12,7 +12,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { images } from '@/constants/indes';
+import { images } from '@/constants';
 import Header from '@/components/Header';
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
@@ -76,16 +76,18 @@ export default function TabLayout() {
   }
 
   return (
-    <SafeAreaView style={{flex:1,marginHorizontal:scale(2) }}>
-    <GestureHandlerRootView style={{ flex: 1}}>
-      <Drawer screenOptions={{ headerShown: true, drawerHideStatusBarOnOpen: true,header:()=>{
-        return <Header onpress={onToggle}/>
-      } }} drawerContent={CustomDrawer}>
-        <Drawer.Screen name='home' options={{ drawerLabel: "Home", headerTitle: "Home" }} />
-        <Drawer.Screen name='file1' options={{ drawerLabel: "File1", headerTitle: "File1" }} />
-        <Drawer.Screen name='file2' options={{ drawerLabel: "File2", headerTitle: "File2" }} />
-      </Drawer>
-    </GestureHandlerRootView>
+    <SafeAreaView style={{ flex: 1, marginHorizontal: scale(2) }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Drawer screenOptions={{
+          headerShown: true, drawerHideStatusBarOnOpen: true, header: () => {
+            return <Header onpress={onToggle} />
+          }
+        }} drawerContent={CustomDrawer}>
+          <Drawer.Screen name='home' options={{ drawerLabel: "Home", headerTitle: "Home" }} />
+          <Drawer.Screen name='file1' options={{ drawerLabel: "File1", headerTitle: "File1" }} />
+          <Drawer.Screen name='file2' options={{ drawerLabel: "File2", headerTitle: "File2" }} />
+        </Drawer>
+      </GestureHandlerRootView>
     </SafeAreaView>
   )
   // <Stack>

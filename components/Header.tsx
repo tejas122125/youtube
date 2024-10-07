@@ -1,4 +1,4 @@
-import { images } from "@/constants/indes";
+import { images } from "@/constants";
 import { useUser } from "@clerk/clerk-expo";
 import { View, Text, Image, TextInput } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,7 +10,7 @@ const Header = ({ onpress }: { onpress: () => void }) => {
     const { isSignedIn, user } = useUser()
     const imageUrl = user?.imageUrl
     const firstName = user?.firstName
-   
+
     return (
         <View className='w-full bg-blue-200  flex-row items-center justify-between '>
             <View className=" flex flex-row justify-center items-center" style={{ padding: scale(4) }}>
@@ -22,9 +22,9 @@ const Header = ({ onpress }: { onpress: () => void }) => {
                 <TouchableOpacity onPress={onpress} >
                     <Image source={images.menu} style={{ height: scale(30), width: scale(30) }} resizeMode="contain" />
                 </TouchableOpacity>
-                
+
             </View>
-           
+
         </View>
     )
 }

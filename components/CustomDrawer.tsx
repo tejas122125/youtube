@@ -1,14 +1,14 @@
-import { View, Text,Image, TouchableOpacity } from "react-native"
+import { View, Text, Image, TouchableOpacity } from "react-native"
 
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer"
 import { useRouter } from "expo-router"
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import { useUser,useClerk } from "@clerk/clerk-expo";
-import { images } from "@/constants/indes";
+import { useUser, useClerk } from "@clerk/clerk-expo";
+import { images } from "@/constants";
 
 
-const CustomDrawer = (props:any) => {
+const CustomDrawer = (props: any) => {
     const { signOut } = useClerk()
     const router = useRouter()
     // save it innto zustand
@@ -16,7 +16,7 @@ const CustomDrawer = (props:any) => {
     // const {imageUrl} = props
     const { top, bottom } = useSafeAreaInsets()
     const imageUrl = user?.imageUrl
-    const handleSignOut = ()=>{
+    const handleSignOut = () => {
         try {
             signOut()
             router.replace('/(auth)/register')
@@ -24,7 +24,7 @@ const CustomDrawer = (props:any) => {
 
         } catch (error) {
             console.log("monui");
-            
+
         }
     }
     return (
@@ -46,7 +46,7 @@ const CustomDrawer = (props:any) => {
               File 2
             </Text>
           </TouchableOpacity> */}
-          <DrawerItemList { ...props}/>
+                    <DrawerItemList {...props} />
                 </View>
             </DrawerContentScrollView>
             <View style={{

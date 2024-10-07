@@ -1,12 +1,15 @@
 import { SafeAreaView } from "react-native-safe-area-context"
-import { Button, Modal, Text, TextInput } from "react-native"
+import { ActivityIndicator, Button, Modal, ScrollViewComponent, Text, TextInput } from "react-native"
 import { View, Image } from "react-native"
 import { useUser } from "@clerk/clerk-expo"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { images } from "@/constants/indes";
-import { useState } from "react";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { images } from "@/constants";
+import { useEffect, useState } from "react";
 import { Searchbar } from "react-native-paper";
+import { fetchData } from "@/lib/fetchData";
+import { searchType } from "@/types/searchResponse";
+import VideoCard from "@/components/VideoCard";
 
 const Home = () => {
     const { isSignedIn, user } = useUser()
@@ -14,6 +17,10 @@ const Home = () => {
     const firstName = user?.firstName
     const [searchModal, setSearchModal] = useState<boolean>(false)
     const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState<Boolean>(false)
+    const [data, setData] = useState<any>()
+    const [error, setError] = useState("")
+    const [fullData, setFullData] = useState("")
     const toggleModal = () => {
         setSearchModal((prev) => {
             return !prev;
@@ -29,6 +36,28 @@ const Home = () => {
             </View>
         )
     }
+    const searchData = async (search: string) => {
+        try {
+            const response = await fetchData(search)
+            // console.log("response id ", response);
+            
+            setData(response)
+            setLoading(false)
+
+        } catch (error) {
+            setError(String(error))
+        }
+    }
+    useEffect(() => {
+        setLoading(true)
+        searchData(searchQuery)
+        console.log("data is ");
+
+
+    }, [data])
+
+
+
 
     return (
         <View style={{ flex: 1, backgroundColor: 'green', flexDirection: 'column', alignItems: "center", gap: scale(6) }} >
@@ -50,25 +79,28 @@ const Home = () => {
 
                 </View>
             </View>
-            <View style={{ width: '100%', flex: 1, flexDirection: 'column', backgroundColor: 'white', justifyContent: "flex-start", alignItems: 'center', gap: scale(10), paddingHorizontal: scale(6) }}>
+            <View style={{ width: '100%', flex: 1, flexDirection: 'column', backgroundColor: 'purple', justifyContent: "center", alignItems: 'center', gap: scale(10), paddingHorizontal: scale(6) }}>
                 <View style={{ width: '100%', padding: scale(6), borderBottomColor: '#1f0303', borderBottomWidth: 2 }}>
                     <Searchbar
+                        autoCapitalize='none' autoCorrect={false} clearButtonMode="always"
                         placeholder="Search"
                         onChangeText={setSearchQuery}
                         value={searchQuery}
                     />
                 </View>
-                <View style={{ flex: 1, backgroundColor: 'red', width: '100%', marginBottom: verticalScale(10), overflow: 'hidden', flexDirection:"column", justifyContent:'center',alignItems:'center' }}>
-                    <Text>vedyfvhdfg</Text>
-                </View>
+                {loading ? <ActivityIndicator size={"large"} color={'#ef9898'} /> : <FlatList data={data} keyExtractor={(item) => item.videoTitle} renderItem={(item) => <VideoCard item={item} />} />}
+
+
             </View>
 
 
-           
-        </View>
+
+        </View >
 
     )
 }
 
 
 export default Home
+
+// < ScrollViewComponent style = {{ flex: 1, backgroundColor: '#ef9898', width: '100%', marginBottom: verticalScale(10), flexDirection: "column", justifyContent: 'center', alignItems: 'center', padding: scale(4), gap: scale(4) }}>
