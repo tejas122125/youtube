@@ -33,3 +33,5 @@ export const youtubeData = [
     },
 
 ]
+
+export const blueTheme = '#0a113b'
