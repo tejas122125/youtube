@@ -3,22 +3,82 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Animated, Dimensi
 import { Ionicons } from '@expo/vector-icons'; // For the up-arrow icon (optional, you can install via `expo install @expo/vector-icons`)
 
 const { height } = Dimensions.get('window'); // Get the screen height for responsiveness
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 const ChatWindow = () => {
     const [showScrollTopButton, setShowScrollTopButton] = useState(false);
     const scrollViewRef = useRef<ScrollView>(null);
-
+const sentimentsColor={
+    "negative": '#fec9c6',
+    'positive':'#dafec6',
+    'neutral':'#c1c2b5',
+    'question':'#f7e2fc'
+}
     const messages = [
-        { id: 1, text: "Hello!", sender: "user" },
-        { id: 2, text: "Hi, how are you?", sender: "reply" },
-        { id: 3, text: "I'm doing great, thanks for asking!", sender: "user" },
-        { id: 4, text: "That's awesome to hear!", sender: "reply" },
-        { id: 5, text: "What are you up to?", sender: "user" },
-        { id: 6, text: "Just working on a project.", sender: "reply" },
-        { id: 7, text: "Sounds good!", sender: "user" },
-    ];
+        {
+            "id": 1,
+            "comment": "This is comment number 1 with question sentiment.",
+            "reply": "This is reply number 1 with negative sentiment.",
+            "sentiment": "question"
+        },
+        {
+            "id": 2,
+            "comment": "This is comment number 2 with negative sentiment.",
+            "reply": "This is reply number 2 with neutral sentiment.",
+            "sentiment": "negative"
+        },
+        {
+            "id": 3,
+            "comment": "This is comment number 3 with negative sentiment.",
+            "reply": "This is reply number 3 with negative sentiment.",
+            "sentiment": "negative"
+        },
+        {
+            "id": 4,
+            "comment": "This is comment number 4 with question sentiment.",
+            "reply": "This is reply number 4 with question sentiment.",
+            "sentiment": "question"
+        },
+        {
+            "id": 5,
+            "comment": "This is comment number 5 with neutral sentiment.",
+            "reply": "This is reply number 5 with question sentiment.",
+            "sentiment": "neutral"
+        },
+        {
+            "id": 6,
+            "comment": "This is comment number 6 with neutral sentiment.",
+            "reply": "This is reply number 6 with positive sentiment.",
+            "sentiment": "neutral"
+        },
+        {
+            "id": 7,
+            "comment": "This is comment number 7 with positive sentiment.",
+            "reply": "This is reply number 7 with neutral sentiment.",
+            "sentiment": "positive"
+        },
+        {
+            "id": 8,
+            "comment": "This is comment number 8 with neutral sentiment.",
+            "reply": "This is reply number 8 with negative sentiment.",
+            "sentiment": "neutral"
+        },
+        {
+            "id": 9,
+            "comment": "This is comment number 9 with negative sentiment.",
+            "reply": "This is reply number 9 with question sentiment.",
+            "sentiment": "negative"
+        },
+        {
+            "id": 10,
+            "comment": "This is comment number 10 with neutral sentiment.",
+            "reply": "This is reply number 10 with question sentiment.",
+            "sentiment": "neutral"
+        }
+    ]
 
-    const handleScroll = (event:NativeSyntheticEvent<NativeScrollEvent>) => {
+
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y;
 
         // Show the scroll-to-top button if scrolled down a bit
@@ -41,19 +101,43 @@ const ChatWindow = () => {
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
             >
-                {messages.map((message, index) => (
-                    <View
-                        key={message.id}
-                        style={[
-                            styles.messageBubble,
-                            message.sender === "user"
-                                ? styles.userBubble
-                                : styles.replyBubble,
-                        ]}
-                    >
-                        <Text style={styles.messageText}>{message.text}</Text>
-                    </View>
-                ))}
+                {messages.map((message, index) => 
+                {
+                    let sentiment = message.sentiment
+                    let color = '#0a113b'
+                    switch(sentiment){
+                        case 'negative':color=sentimentsColor.negative;
+                        break;
+                        case 'positive':color=sentimentsColor.positive;
+                        break;
+                        case 'neutral':color=sentimentsColor.neutral;
+                        break;
+                        case 'question':color=sentimentsColor.question;
+                        break;
+                    }
+                    return (<View style={[styles.sentimentContainer,{backgroundColor:color}]}>
+                        <View
+                            key={message.id}
+                            style={[
+                                styles.messageBubble, styles.userBubble,
+
+                            ]}
+                        >
+                            <Text style={styles.messageText}>{message.comment}</Text>
+                        </View>
+                        <View
+                            key={message.id}
+                            style={[
+                                styles.messageBubble,
+                                styles.replyBubble
+                            ]}
+                        >
+                            <Text style={styles.messageText}>{message.reply}</Text>
+                        </View>
+                    </View>)
+                }
+                   
+                )}
             </ScrollView>
 
             {/* Scroll-to-Top Button */}
@@ -69,43 +153,49 @@ const ChatWindow = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width:'100%',
+        width: '100%',
         backgroundColor: '#0a113b', // Dark blue background
-        padding: 10,
+        padding: scale(10),
+    },
+    sentimentContainer : {
+flex:1,
+width:'100%',
+padding:scale(3)
+
     },
     scrollView: {
         flex: 1,
     },
     messageBubble: {
         maxWidth: '70%',
-        padding: 10,
-        borderRadius: 15,
-        marginVertical: 5,
+        padding: scale(10),
+        borderRadius: scale(15),
+        marginVertical: verticalScale(5),
     },
     userBubble: {
         backgroundColor: '#4C8BF5', // Blue for user message
         alignSelf: 'flex-start',
     },
     replyBubble: {
-        backgroundColor: '#d1d1d1', // Light gray for replies
+        backgroundColor: '#51306e', // Light gray for replies
         alignSelf: 'flex-end',
     },
     messageText: {
         color: '#fff', // Text color white
-        fontSize: 16,
+        fontSize: scale(16),
     },
     scrollToTopButton: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
+        bottom: scale(85),
+        right: scale(20),
         backgroundColor: '#4C8BF5',
-        borderRadius: 50,
-        padding: 10,
-        elevation: 10, // Shadow for Android
-        shadowColor: '#000', // Shadow for iOS
+        borderRadius: scale(50),
+        padding: scale(10),
+        elevation: scale(10), // Shadow for Android
+        shadowColor: '#fff', // Shadow for iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
-        shadowRadius: 3,
+        shadowRadius: scale(10),
     },
 });
 
