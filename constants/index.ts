@@ -5,8 +5,11 @@ import need2 from '@/assets/images/need2.png'
 import logout from '@/assets/images/logout.png'
 import menu from '@/assets/images/menu.png'
 import search from '@/assets/images/search.png'
+import like from '@/assets/images/like.png'
+import dislike from '@/assets/images/dislike.png'
+
 export const images = {
-    google,homepage,needehn,need2,logout,menu,search
+    google,homepage,needehn,need2,logout,menu,search,like,dislike
 }
 
 

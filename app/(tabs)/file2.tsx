@@ -4,6 +4,7 @@ import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { scale, verticalScale } from "react-native-size-matters";
 import { images } from "@/constants";
+import ChatWindow from "@/components/ChatWindow";
 const File2 = () => {
 
     const navigation = useNavigation()
@@ -24,20 +25,17 @@ const File2 = () => {
                 <View style={styles.textContainer}>
                     <Text style={styles.title}> Comments Stats</Text>
                     <View style={styles.stats}>
-                        <Image source={images.google} style={{ height: scale(20), width: scale(20), borderRadius: scale(100), padding: scale(2) }} />
+                        <Image source={images.like} style={{ height: scale(30), width: scale(30), borderRadius: scale(10), padding: scale(2) }} />
                         <Text style={styles.description}>100%</Text>
                     </View>
                     <View style={styles.stats}>
-                        <Image source={images.google} style={{ height: scale(20), width: scale(20), borderRadius: scale(100), padding: scale(2) }} />
+                        <Image source={images.dislike} style={{ height: scale(30), width: scale(30), borderRadius: scale(10), padding: scale(2) }} />
                         <Text style={styles.description}>100%</Text>
                     </View>
-                    <View style={styles.stats}>
-                        <Image source={images.google} style={{ height: scale(20), width: scale(20), borderRadius: scale(100), padding: scale(2) }} />
-                        <Text style={styles.description}>100%</Text>
-                    </View>
-                    
+                   
                 </View>
             </View>
+            <ChatWindow/>
         </View>
     )
 }
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0a113b',
         borderRadius: 8,
         elevation: 5, // Adds shadow for Android
-        shadowColor: '#000', // Adds shadow for iOS
+        shadowColor: '#fff', // Adds shadow for iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -87,7 +85,10 @@ const styles = StyleSheet.create({
     },
     stats: {
         flexDirection: 'row',
+        marginBottom:verticalScale(6),
         width:'100%',
+        backgroundColor:'#4c5d90',
+        borderRadius:10,
         justifyContent: 'space-around',
         paddingStart: scale(6),
         padding: scale(2),

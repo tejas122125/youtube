@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0a113b',
         borderRadius: 8,
         elevation: 5, // Adds shadow for Android
-        shadowColor: '#000', // Adds shadow for iOS
+        shadowColor: '#fff', // Adds shadow for iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     description: {
         fontSize: 14,
-        color: '#f79890',
+        color: '#f0d5d3',
         marginBottom: 5,
     },
     subText: {
