@@ -32,7 +32,7 @@ const Home = () => {
     // Handler for scrolling
     const handleScroll = (event: any) => {
         const offsetY = event.nativeEvent.contentOffset.y;
-        console.log(offsetY);
+        // console.log(offsetY);
 
         // Check if the scroll position is above the scrollLimit
         if (offsetY > scrollLimit) {
@@ -76,7 +76,7 @@ const Home = () => {
         setLoading(true)
         searchData(searchQuery)
         setFullData(data)
-        console.log("data is ", data);
+        // console.log("data is ", data);
 
 
     }, [])

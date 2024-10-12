@@ -1,19 +1,23 @@
 import { View, Text, Button, Image, StyleSheet } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { DrawerActions } from "@react-navigation/native";
+import { DrawerActions, useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import { scale, verticalScale } from "react-native-size-matters";
 import { images } from "@/constants";
 import ChatWindow from "@/components/ChatWindow";
+import FilterButton from "@/components/FilterButton";
+import { useCallback, useEffect, useState } from "react";
 const File2 = () => {
-
+    const [initialState, setInitialState] = useState(false)
     const navigation = useNavigation()
 
     const onToggle = () => {
         navigation.dispatch(DrawerActions.openDrawer)
     }
+
+
     return (
-        <View style={{ flex: 1, flexDirection: "column", backgroundColor: '#0a113b', padding: scale(6), alignItems: "center", justifyContent: 'flex-start', gap: verticalScale(6) }}>
+        <View style={{ flex: 1, flexDirection: "column", backgroundColor: '#0a113b', padding: scale(4), alignItems: "center", justifyContent: 'flex-start', gap: verticalScale(6) ,position:'relative'}}>
             <View style={styles.cardContainer}>
                 {/* Image on the left side */}
                 <Image
@@ -32,10 +36,11 @@ const File2 = () => {
                         <Image source={images.dislike} style={{ height: scale(30), width: scale(30), borderRadius: scale(10), padding: scale(2) }} />
                         <Text style={styles.description}>100%</Text>
                     </View>
-                   
+
                 </View>
             </View>
-            <ChatWindow/>
+            <FilterButton/>
+            <ChatWindow />
         </View>
     )
 }
@@ -85,10 +90,10 @@ const styles = StyleSheet.create({
     },
     stats: {
         flexDirection: 'row',
-        marginBottom:verticalScale(6),
-        width:'100%',
-        backgroundColor:'#4c5d90',
-        borderRadius:10,
+        marginBottom: verticalScale(6),
+        width: '100%',
+        backgroundColor: '#4c5d90',
+        borderRadius: 10,
         justifyContent: 'space-around',
         paddingStart: scale(6),
         padding: scale(2),

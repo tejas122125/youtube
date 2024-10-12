@@ -68,7 +68,7 @@ export default function TabLayout() {
   const navigation = useNavigation()
   const { isSignedIn, user } = useUser()
   const imageUrl = user?.imageUrl
-  console.log(user?.imageUrl);
+  // console.log(user?.imageUrl);
   const firstName = user?.firstName
 
   const onToggle = () => {

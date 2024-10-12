@@ -19,7 +19,7 @@ const Header = ({ onpress }: { onpress: () => void }) => {
             </View>
             <View className="flex-1 flex-row-reverse items-center justify-between h-full" style={{ padding: scale(6), gap: scale(4) }}>
 
-                <TouchableOpacity onPress={onpress} >
+                <TouchableOpacity onPress={onpress} style={{padding:scale(16),flex:1}}>
                     <Image source={images.menu} style={{ height: scale(30), width: scale(30) }} resizeMode="contain" />
                 </TouchableOpacity>
 

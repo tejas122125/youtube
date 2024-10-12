@@ -4,16 +4,17 @@ import { Ionicons } from '@expo/vector-icons'; // For the up-arrow icon (optiona
 
 const { height } = Dimensions.get('window'); // Get the screen height for responsiveness
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import FilterButton from './FilterButton';
 
 const ChatWindow = () => {
     const [showScrollTopButton, setShowScrollTopButton] = useState(false);
     const scrollViewRef = useRef<ScrollView>(null);
-const sentimentsColor={
-    "negative": '#fec9c6',
-    'positive':'#dafec6',
-    'neutral':'#c1c2b5',
-    'question':'#f7e2fc'
-}
+    const sentimentsColor = {
+        "negative": '#fec9c6',
+        'positive': '#dafec6',
+        'neutral': '#c1c2b5',
+        'question': '#f7e2fc'
+    }
     const messages = [
         {
             "id": 1,
@@ -101,21 +102,20 @@ const sentimentsColor={
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
             >
-                {messages.map((message, index) => 
-                {
+                {messages.map((message, index) => {
                     let sentiment = message.sentiment
                     let color = '#0a113b'
-                    switch(sentiment){
-                        case 'negative':color=sentimentsColor.negative;
-                        break;
-                        case 'positive':color=sentimentsColor.positive;
-                        break;
-                        case 'neutral':color=sentimentsColor.neutral;
-                        break;
-                        case 'question':color=sentimentsColor.question;
-                        break;
+                    switch (sentiment) {
+                        case 'negative': color = sentimentsColor.negative;
+                            break;
+                        case 'positive': color = sentimentsColor.positive;
+                            break;
+                        case 'neutral': color = sentimentsColor.neutral;
+                            break;
+                        case 'question': color = sentimentsColor.question;
+                            break;
                     }
-                    return (<View style={[styles.sentimentContainer,{backgroundColor:color}]}>
+                    return (<View style={[styles.sentimentContainer, { backgroundColor: color }]}>
                         <View
                             key={message.id}
                             style={[
@@ -136,7 +136,7 @@ const sentimentsColor={
                         </View>
                     </View>)
                 }
-                   
+
                 )}
             </ScrollView>
 
@@ -153,14 +153,16 @@ const sentimentsColor={
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
+        // position: 'relative',
         width: '100%',
         backgroundColor: '#0a113b', // Dark blue background
-        padding: scale(10),
+        padding: scale(6),
     },
-    sentimentContainer : {
-flex:1,
-width:'100%',
-padding:scale(3)
+    sentimentContainer: {
+        flex: 1,
+        width: '100%',
+        padding: scale(3)
 
     },
     scrollView: {
