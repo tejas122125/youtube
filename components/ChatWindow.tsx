@@ -1,20 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Animated, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // For the up-arrow icon (optional, you can install via `expo install @expo/vector-icons`)
 
 const { height } = Dimensions.get('window'); // Get the screen height for responsiveness
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import FilterButton from './FilterButton';
+// import FilterButton from './FilterButton';
+import { useFocusEffect } from '@react-navigation/native';
+
+
+
+
+
 
 const ChatWindow = () => {
+    const [commentType, setCommentType] = useState<string>("all")
     const [showScrollTopButton, setShowScrollTopButton] = useState(false);
     const scrollViewRef = useRef<ScrollView>(null);
-    const sentimentsColor = {
-        "negative": '#fec9c6',
-        'positive': '#dafec6',
-        'neutral': '#c1c2b5',
-        'question': '#f7e2fc'
-    }
+const filterComment = (type:string)=>{
+    setCommentType(type)
+}
+
     const messages = [
         {
             "id": 1,
@@ -78,6 +83,82 @@ const ChatWindow = () => {
         }
     ]
 
+    const filter = () => {
+        const [isExpanded, setIsExpanded] = useState<Boolean>(false);
+
+        // Animated values for scaling and height
+        const heightAnim = useRef(new Animated.Value(0)).current;
+        const opacityAnim = useRef(new Animated.Value(0)).current;
+
+        useFocusEffect(useCallback(() => {
+            setIsExpanded(false)
+        }, []))
+
+        // Toggles the expansion of the filter view
+        const toggleExpand = () => {
+            if (isExpanded) {
+                // Collapse
+                Animated.parallel([
+                    Animated.timing(heightAnim, {
+                        toValue: 0,
+                        duration: 300,
+                        useNativeDriver: false,
+                    }),
+                    Animated.timing(opacityAnim, {
+                        toValue: 0,
+                        duration: 300,
+                        useNativeDriver: false,
+                    }),
+                ]).start(() => setIsExpanded(false));
+            } else {
+                setIsExpanded(true);
+                // Expand
+                Animated.parallel([
+                    Animated.timing(heightAnim, {
+                        toValue: 150, // Height for 4 filters
+                        duration: 300,
+                        useNativeDriver: false,
+                    }),
+                    Animated.timing(opacityAnim, {
+                        toValue: 1,
+                        duration: 300,
+                        useNativeDriver: false,
+                    }),
+                ]).start();
+            }
+        };
+
+        const FilterButton = ({ title, iconName, onPress }: { title: string, iconName: any, onPress:any }) => (
+            <TouchableOpacity onPress={onPress} style={styles.filterButton}>
+                <Ionicons name={iconName} size={20} color="#fff" />
+                <Text style={styles.filterText}>{title}</Text>
+            </TouchableOpacity>
+        );
+
+        return (
+            <>
+                {/* Main Filter Button */}
+                <TouchableOpacity onPress={toggleExpand} style={styles.mainButton}>
+                    <Ionicons name={isExpanded ? "close" : "filter"} size={scale(20)} color="#fff" />
+                    <Text style={styles.buttonText}>Filter</Text>
+                </TouchableOpacity>
+
+                {/* Animated View for Filter Options */}
+                {isExpanded && (
+                    <Animated.ScrollView style={[styles.filterContainer, { maxHeight: heightAnim, opacity: opacityAnim }]}>
+                        <FilterButton title="Positive" iconName="happy-outline" onPress={filterComment('positive')} />
+                        <FilterButton title="Negative" iconName="sad-outline" onPress={filterComment('negative')} />
+                        <FilterButton title="Neutral" iconName="remove-outline" onPress={filterComment('neutral')} />
+                        <FilterButton title="Question" iconName="help-outline" onPress={filterComment('question')} />
+                    </Animated.ScrollView>
+                )}
+            </>
+
+
+
+
+        );
+    };
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y;
@@ -96,6 +177,7 @@ const ChatWindow = () => {
 
     return (
         <View style={styles.container}>
+            <filter/>
             <ScrollView
                 ref={scrollViewRef}
                 style={styles.scrollView}
@@ -103,39 +185,37 @@ const ChatWindow = () => {
                 scrollEventThrottle={16}
             >
                 {messages.map((message, index) => {
-                    let sentiment = message.sentiment
-                    let color = '#0a113b'
-                    switch (sentiment) {
-                        case 'negative': color = sentimentsColor.negative;
-                            break;
-                        case 'positive': color = sentimentsColor.positive;
-                            break;
-                        case 'neutral': color = sentimentsColor.neutral;
-                            break;
-                        case 'question': color = sentimentsColor.question;
-                            break;
-                    }
-                    return (<View style={[styles.sentimentContainer, { backgroundColor: color }]}>
-                        <View
-                            key={message.id}
-                            style={[
-                                styles.messageBubble, styles.userBubble,
+          
+                    
+                     if (message.sentiment === commentType || commentType === 'all') {
+                        return (
+                            <View style={[styles.sentimentContainer, { backgroundColor: '#0a113b' }]}>
+                                <View
+                                    key={message.id}
+                                    style={[
+                                        styles.messageBubble, styles.userBubble,
 
-                            ]}
-                        >
-                            <Text style={styles.messageText}>{message.comment}</Text>
-                        </View>
-                        <View
-                            key={message.id}
-                            style={[
-                                styles.messageBubble,
-                                styles.replyBubble
-                            ]}
-                        >
-                            <Text style={styles.messageText}>{message.reply}</Text>
-                        </View>
-                    </View>)
+                                    ]}
+                                >
+                                    <Text style={styles.messageText}>{message.comment}</Text>
+                                </View>
+                                <View
+                                    key={message.id}
+                                    style={[
+                                        styles.messageBubble,
+                                        styles.replyBubble
+                                    ]}
+                                >
+                                    <Text style={styles.messageText}>{message.reply}</Text>
+                                </View>
+                            </View>
+                        )
+                    }
+                    else {
+                    return null;
+                    }
                 }
+                
 
                 )}
             </ScrollView>
@@ -151,10 +231,53 @@ const ChatWindow = () => {
 };
 
 const styles = StyleSheet.create({
+    mainButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+
+        justifyContent: 'flex-end',
+        backgroundColor: '#3A4D6A',
+        borderRadius: 25,
+        paddingVertical: scale(6),
+        paddingHorizontal: scale(25),
+        alignSelf: 'flex-end',
+        marginRight: scale(4),
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: scale(14),
+        marginLeft: scale(10),
+        fontWeight: 'bold',
+    },
+    filterContainer: {
+        backgroundColor: '#1E2A38',
+        borderRadius: scale(10),
+        marginTop: scale(2),
+        position: 'absolute',
+        width: scale(150),
+        zIndex: 10,
+        top: verticalScale(40),
+        right: scale(15)
+    },
+    filterButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        paddingVertical: verticalScale(8),
+        paddingHorizontal: scale(10),
+        borderBottomWidth: 1,
+        borderBottomColor: '#3A4D6A',
+    },
+    filterText: {
+        color: '#fff',
+        fontSize: scale(12),
+        marginLeft: scale(10),
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         flexDirection: 'column',
-        // position: 'relative',
+        position: 'relative',
         width: '100%',
         backgroundColor: '#0a113b', // Dark blue background
         padding: scale(6),

@@ -5,7 +5,6 @@ import { useNavigation } from "expo-router";
 import { scale, verticalScale } from "react-native-size-matters";
 import { images } from "@/constants";
 import ChatWindow from "@/components/ChatWindow";
-import FilterButton from "@/components/FilterButton";
 import { useCallback, useEffect, useState } from "react";
 const File2 = () => {
     const [initialState, setInitialState] = useState(false)
@@ -39,7 +38,6 @@ const File2 = () => {
 
                 </View>
             </View>
-            <FilterButton/>
             <ChatWindow />
         </View>
     )
