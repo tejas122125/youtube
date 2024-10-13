@@ -142,7 +142,6 @@ const filterComment = (type:string)=>{
                     <Ionicons name={isExpanded ? "close" : "filter"} size={scale(20)} color="#fff" />
                     <Text style={styles.buttonText}>Filter</Text>
                 </TouchableOpacity>
-
                 {/* Animated View for Filter Options */}
                 {isExpanded && (
                     <Animated.ScrollView style={[styles.filterContainer, { maxHeight: heightAnim, opacity: opacityAnim }]}>
@@ -153,10 +152,6 @@ const filterComment = (type:string)=>{
                     </Animated.ScrollView>
                 )}
             </>
-
-
-
-
         );
     };
 
