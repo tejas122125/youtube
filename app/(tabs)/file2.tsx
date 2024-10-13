@@ -16,7 +16,7 @@ const File2 = () => {
 
 
     return (
-        <View style={{ flex: 1, flexDirection: "column", backgroundColor: '#0a113b', padding: scale(4), alignItems: "center", justifyContent: 'flex-start', gap: verticalScale(6) ,position:'relative'}}>
+        <View style={{ flex: 1, flexDirection: "column", backgroundColor: '#0a113b', padding: scale(4), alignItems: "center", justifyContent: 'flex-start', gap: verticalScale(2) ,position:'relative'}}>
             <View style={styles.cardContainer}>
                 {/* Image on the left side */}
                 <Image

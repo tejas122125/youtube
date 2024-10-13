@@ -15,10 +15,17 @@ import { useFocusEffect } from '@react-navigation/native';
 const ChatWindow = () => {
     const [commentType, setCommentType] = useState<string>("all")
     const [showScrollTopButton, setShowScrollTopButton] = useState(false);
+    const [isExpanded, setIsExpanded] = useState<Boolean>(false);
+
+    useFocusEffect(useCallback(() => {
+        setIsExpanded(false)
+    }, []))
+    
     const scrollViewRef = useRef<ScrollView>(null);
-const filterComment = (type:string)=>{
-    setCommentType(type)
-}
+// const chooseCommentType = (type :string)=>{
+//     setCommentType(type)
+//     // toggleExpand();
+// }
 
     const messages = [
         {
@@ -83,77 +90,54 @@ const filterComment = (type:string)=>{
         }
     ]
 
-    const filter = () => {
-        const [isExpanded, setIsExpanded] = useState<Boolean>(false);
 
-        // Animated values for scaling and height
-        const heightAnim = useRef(new Animated.Value(0)).current;
-        const opacityAnim = useRef(new Animated.Value(0)).current;
+    // Animated values for scaling and height
+    const heightAnim = useRef(new Animated.Value(0)).current;
+    const opacityAnim = useRef(new Animated.Value(0)).current;
 
-        useFocusEffect(useCallback(() => {
-            setIsExpanded(false)
-        }, []))
-
-        // Toggles the expansion of the filter view
-        const toggleExpand = () => {
-            if (isExpanded) {
-                // Collapse
-                Animated.parallel([
-                    Animated.timing(heightAnim, {
-                        toValue: 0,
-                        duration: 300,
-                        useNativeDriver: false,
-                    }),
-                    Animated.timing(opacityAnim, {
-                        toValue: 0,
-                        duration: 300,
-                        useNativeDriver: false,
-                    }),
-                ]).start(() => setIsExpanded(false));
-            } else {
-                setIsExpanded(true);
-                // Expand
-                Animated.parallel([
-                    Animated.timing(heightAnim, {
-                        toValue: 150, // Height for 4 filters
-                        duration: 300,
-                        useNativeDriver: false,
-                    }),
-                    Animated.timing(opacityAnim, {
-                        toValue: 1,
-                        duration: 300,
-                        useNativeDriver: false,
-                    }),
-                ]).start();
-            }
-        };
-
-        const FilterButton = ({ title, iconName, onPress }: { title: string, iconName: any, onPress:any }) => (
-            <TouchableOpacity onPress={onPress} style={styles.filterButton}>
-                <Ionicons name={iconName} size={20} color="#fff" />
-                <Text style={styles.filterText}>{title}</Text>
-            </TouchableOpacity>
-        );
-
-        return (
-            <>
-                {/* Main Filter Button */}
-                <TouchableOpacity onPress={toggleExpand} style={styles.mainButton}>
-                    <Ionicons name={isExpanded ? "close" : "filter"} size={scale(20)} color="#fff" />
-                    <Text style={styles.buttonText}>Filter</Text>
-                </TouchableOpacity>
-                {/* Animated View for Filter Options */}
-                {isExpanded && (
-                    <Animated.ScrollView style={[styles.filterContainer, { maxHeight: heightAnim, opacity: opacityAnim }]}>
-                        <FilterButton title="Positive" iconName="happy-outline" onPress={filterComment('positive')} />
-                        <FilterButton title="Negative" iconName="sad-outline" onPress={filterComment('negative')} />
-                        <FilterButton title="Neutral" iconName="remove-outline" onPress={filterComment('neutral')} />
-                        <FilterButton title="Question" iconName="help-outline" onPress={filterComment('question')} />
-                    </Animated.ScrollView>
-                )}
-            </>
-        );
+    // Toggles the expansion of the filter view
+    const toggleExpand = () => {
+        if (isExpanded) {
+            // Collapse
+            Animated.parallel([
+                Animated.timing(heightAnim, {
+                    toValue: 0,
+                    duration: 300,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(opacityAnim, {
+                    toValue: 0,
+                    duration: 300,
+                    useNativeDriver: false,
+                }),
+            ]).start(() => setIsExpanded(false));
+        } else {
+            setIsExpanded(true);
+            // Expand
+            Animated.parallel([
+                Animated.timing(heightAnim, {
+                    toValue: 150, // Height for 4 filters
+                    duration: 300,
+                    useNativeDriver: false,
+                }),
+                Animated.timing(opacityAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: false,
+                }),
+            ]).start();
+        }
     };
+
+    const FilterButton = ({ title, iconName, onPress }: { title: string, iconName: any, onPress: any }) => (
+        <TouchableOpacity onPress={onPress} style={[styles.filterButton, { backgroundColor: title.toLowerCase() === commentType ? "#3951c8" : '#3A4D6A' }]}>
+            <Ionicons name={iconName} size={20} color="#fff" />
+            <Text style={styles.filterText}>{title}</Text>
+        </TouchableOpacity>
+    );
+
+
+
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y;
@@ -172,7 +156,32 @@ const filterComment = (type:string)=>{
 
     return (
         <View style={styles.container}>
-            <filter/>
+                {/* Main Filter Button */}
+                <TouchableOpacity onPress={toggleExpand} style={styles.mainButton}>
+                    <Ionicons name={isExpanded ? "close" : "filter"} size={scale(20)} color="#fff" />
+                    <Text style={styles.buttonText}>Filter</Text>
+                </TouchableOpacity>
+                {/* Animated View for Filter Options */}
+                {isExpanded && (
+                    <Animated.ScrollView style={[styles.filterContainer, { maxHeight: heightAnim, opacity: opacityAnim }]}>
+                        <FilterButton title="Positive" iconName="happy-outline" onPress={()=> {setCommentType('positive')
+                            toggleExpand()
+                        }} />
+                    <FilterButton title="Negative" iconName="sad-outline" onPress={() => {
+                        setCommentType('negative')
+                        toggleExpand()
+                    }} />
+                    <FilterButton title="Neutral" iconName="remove-outline" onPress={() => {
+                        setCommentType('neutral')
+                        toggleExpand()
+                    }} />
+                    <FilterButton title="Question" iconName="help-outline" onPress={() => {
+                        setCommentType('question')
+                        toggleExpand()
+                    }} />
+                    </Animated.ScrollView>
+                )}
+            
             <ScrollView
                 ref={scrollViewRef}
                 style={styles.scrollView}
@@ -180,9 +189,9 @@ const filterComment = (type:string)=>{
                 scrollEventThrottle={16}
             >
                 {messages.map((message, index) => {
-          
-                    
-                     if (message.sentiment === commentType || commentType === 'all') {
+
+
+                    if (message.sentiment === commentType || commentType === 'all') {
                         return (
                             <View style={[styles.sentimentContainer, { backgroundColor: '#0a113b' }]}>
                                 <View
@@ -207,11 +216,9 @@ const filterComment = (type:string)=>{
                         )
                     }
                     else {
-                    return null;
+                        return null;
                     }
                 }
-                
-
                 )}
             </ScrollView>
 
@@ -233,9 +240,21 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         backgroundColor: '#3A4D6A',
         borderRadius: 25,
-        paddingVertical: scale(6),
+        paddingVertical: scale(8),
         paddingHorizontal: scale(25),
         alignSelf: 'flex-end',
+        marginRight: scale(4),
+    },
+    commentNumber: {
+        flexDirection: 'row',
+        alignItems: 'center',
+
+        justifyContent: 'flex-end',
+        backgroundColor: '#3A4D6A',
+        borderRadius: 25,
+        paddingVertical: scale(8),
+        paddingHorizontal: scale(25),
+        alignSelf: 'flex-start',
         marginRight: scale(4),
     },
     buttonText: {
@@ -246,13 +265,15 @@ const styles = StyleSheet.create({
     },
     filterContainer: {
         backgroundColor: '#1E2A38',
-        borderRadius: scale(10),
+        
+        borderRadius: scale(100),
         marginTop: scale(2),
         position: 'absolute',
         width: scale(150),
         zIndex: 10,
         top: verticalScale(40),
-        right: scale(15)
+        right: scale(15),
+        paddingBottom:verticalScale(10)
     },
     filterButton: {
         flexDirection: 'row',
@@ -261,7 +282,7 @@ const styles = StyleSheet.create({
         paddingVertical: verticalScale(8),
         paddingHorizontal: scale(10),
         borderBottomWidth: 1,
-        borderBottomColor: '#3A4D6A',
+        // borderBottomColor: '#3A4D6A',
     },
     filterText: {
         color: '#fff',
@@ -272,10 +293,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
+        gap: verticalScale(2),
         position: 'relative',
         width: '100%',
         backgroundColor: '#0a113b', // Dark blue background
-        padding: scale(6),
+        padding: scale(2),
     },
     sentimentContainer: {
         flex: 1,
