@@ -1,11 +1,12 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Animated, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Animated, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // For the up-arrow icon (optional, you can install via `expo install @expo/vector-icons`)
 
 const { height } = Dimensions.get('window'); // Get the screen height for responsiveness
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 // import FilterButton from './FilterButton';
 import { useFocusEffect } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 

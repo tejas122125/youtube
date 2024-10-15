@@ -1,4 +1,4 @@
-import { View, Text, Button, Image, StyleSheet } from "react-native"
+import { View, Text, Button, Image, StyleSheet, Dimensions } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { DrawerActions, useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
@@ -6,6 +6,11 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { images } from "@/constants";
 import ChatWindow from "@/components/ChatWindow";
 import { useCallback, useEffect, useState } from "react";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolateColor } from 'react-native-reanimated';
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 const File2 = () => {
     const [initialState, setInitialState] = useState(false)
     const navigation = useNavigation()
@@ -13,6 +18,65 @@ const File2 = () => {
     const onToggle = () => {
         navigation.dispatch(DrawerActions.openDrawer)
     }
+    const ComponentOne = () => (
+        <View style={styles.component}>
+            <Text style={styles.componentText}>This is Component One</Text>
+        </View>
+    );
+
+    const ComponentTwo = () => (
+        <View style={styles.component}>
+            <Text style={styles.componentText}>This is Component Two</Text>
+        </View>
+    );
+    const [isToggled, setIsToggled] = useState(false);
+
+    // Reanimated shared values
+    const toggleValue = useSharedValue(0);
+
+    // Toggle function to switch between the two components
+    const toggleButton = useCallback(() => {
+        setIsToggled((prev) => !prev);
+        toggleValue.value = withTiming(isToggled ? 0 : 1, { duration: 500 });
+    }, [isToggled, toggleValue]);
+
+    // Animated button styles
+    const animatedButtonStyle = useAnimatedStyle(() => {
+        const backgroundColor = interpolateColor(toggleValue.value, [0, 1], ['#3A4D6A', '#cb544a']); // Dark Blue to Red
+        return { backgroundColor };
+    });
+
+    // Animated text color styles
+    const animatedTextStyle = useAnimatedStyle(() => {
+        const textColor = interpolateColor(toggleValue.value, [0, 1], ['#fff', '#fff']);
+        return { color: textColor };
+    });
+
+    // Animated component sliding effect
+    const animatedComponentOneStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    translateX: withTiming(toggleValue.value * -SCREEN_WIDTH, { duration: 500 }), // Slide out to the left
+                },
+            ],
+        };
+    });
+    const animatedComponentTwoStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    translateX: withTiming((toggleValue.value) * -SCREEN_WIDTH, { duration: 500 }), // Slide in from the right
+                },
+            ],
+        };
+    });
+
+    // Highlight current component text style
+    const highlightTextStyle = useAnimatedStyle(() => {
+        const color = interpolateColor(toggleValue.value, [0, 1], ['#cb544a', '#3A4D6A']); // Inverted colors for highlighting
+        return { color };
+    });
 
 
     return (
@@ -38,7 +102,23 @@ const File2 = () => {
 
                 </View>
             </View>
-            <ChatWindow />
+            <Animated.View style={[styles.button, animatedButtonStyle]}>
+                <TouchableOpacity onPress={toggleButton} style={styles.touchable}>
+                    <Animated.Text style={[styles.buttonText, animatedTextStyle]}>
+                        {isToggled ? 'Comment Stats' : 'Comments'}
+                    </Animated.Text>
+                </TouchableOpacity>
+            </Animated.View>
+
+            {/* Sliding Components */}
+            <View style={styles.animatedContainer}>
+                <Animated.View style={[styles.componentContainer, animatedComponentOneStyle]}>
+                    <ComponentOne />
+                </Animated.View>
+                <Animated.View style={[styles.componentContainer, animatedComponentTwoStyle]}>
+                    <ChatWindow />
+                </Animated.View>
+            </View>
         </View>
     )
 }
@@ -106,5 +186,59 @@ const styles = StyleSheet.create({
     subText: {
         fontSize: 12,
         color: '#888',
+    },
+    button: {
+        width:scale(200),
+        height:scale(50),
+        // paddingVertical: scale(4),
+        borderRadius: scale(25),
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        marginBottom: scale(4),
+    },
+    buttonText: {
+        fontSize: scale(14),
+        fontWeight: 'bold',
+    },
+    touchable: {
+        flex: 1,
+        width:'100%',
+        // backgroundColor:'yellow',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    component: {
+        width: scale(300),
+        height: scale(150),
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#1E2A38',
+        borderRadius: scale(15),
+        marginVertical: scale(20),
+    },
+    componentText: {
+        color: '#fff',
+        fontSize: scale(16),
+        fontWeight: 'bold',
+    },
+    highlightText: {
+        fontSize: scale(16),
+        fontWeight: 'bold',
+        marginBottom: scale(20),
+    },
+    animatedContainer: {
+        width: SCREEN_WIDTH,
+        flex:1,
+        overflow: 'hidden',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        backgroundColor:'red'
+    },
+    componentContainer: {
+        width: SCREEN_WIDTH,
+        height:'100%',
+        backgroundColor:'green',
+        alignItems:'center'
     },
 });
