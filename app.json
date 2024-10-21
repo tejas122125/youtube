@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "youtube",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -16,10 +16,12 @@
       "supportsTablet": true
     },
     "android": {
+      "bundleIdentifier": "com.tejasbhai.googleauthexporeactnative",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.bluedevil.youtube"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +33,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "84f3c7f4-bc2b-4525-8705-ba20e9eeaa4b"
+      }
     }
   }
 }

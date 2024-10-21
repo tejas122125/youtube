@@ -16,7 +16,8 @@ import { images } from '@/constants';
 import Header from '@/components/Header';
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-
+import { useAuth } from '@clerk/clerk-expo';
+import { GoogleApis } from 'googleapis';
 // const CustomDrawer = ({ props, signOut }: { props: any, signOut: () => void }) => {
 
 
@@ -74,6 +75,28 @@ export default function TabLayout() {
   const onToggle = () => {
     navigation.dispatch(DrawerActions.openDrawer)
   }
+ 
+  const fetchGoogleTokens = async () => {
+    const { getToken } = useAuth();
+    console.log("inside function");
+    
+    try {
+      // Fetch the access token for Google OAuth provider
+      const googleAccessToken = await getToken();
+      console.log('Google Access Token:', googleAccessToken);
+      // getYouTubeAnalytics(googleAccessToken)
+
+
+      // Now you can use this token to make API requests to Google services
+      // fetchYouTubeAnalytics(googleAccessToken);
+    } catch (error) {
+      console.error('Error fetching Google OAuth tokens:', error);
+    }
+  };
+    console.log("goiong with hiwdwdii google");
+    
+    fetchGoogleTokens()
+
 
   return (
     <SafeAreaView style={{ flex: 1, marginHorizontal: scale(2) }}>

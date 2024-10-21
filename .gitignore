@@ -1,4 +1,6 @@
 node_modules/
+android/
+firebaseConfig.ts
 .expo/
 dist/
 npm-debug.*

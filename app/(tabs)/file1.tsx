@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, Animated } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const ScrollLimitExample = () => {
     // Create a reference for the ScrollView
@@ -11,9 +12,9 @@ const ScrollLimitExample = () => {
     const scrollLimit = 1550; // Set the limit in pixels where you want to stop upward scroll
 
     // Handler for scrolling
-    const handleScroll = (event:any) => {
+    const handleScroll = (event: any) => {
         const offsetY = event.nativeEvent.contentOffset.y;
-console.log(offsetY);
+        console.log(offsetY);
 
         // Check if the scroll position is above the scrollLimit
         if (offsetY > scrollLimit) {
@@ -24,69 +25,13 @@ console.log(offsetY);
 
     return (
         <View style={styles.container}>
-            <ScrollView
-                ref={scrollViewRef}
-                onScroll={handleScroll} // Attach the scroll handler
-                scrollEventThrottle={16} // Ensures smooth scrolling updates
-                style={styles.scrollView}
-            >
-                {/* Content goes here */}
-                <View style={styles.content}>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>Scroll Down to See More</Text>
-                    <Text style={styles.text}>You've reached the scroll limit! Scrolling up will be restricted beyond this point.</Text>
-                    <View style={styles.separator} />
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
-                    <Text style={styles.text}>More content after the scroll limit</Text>
 
-                    <Text style={styles.text}>More content after the  limit</Text>
+            <TouchableOpacity style={{ backgroundColor: 'red' }}>
+                <Text>
+                    google authenticate
+                </Text>
+            </TouchableOpacity>
 
-                </View>
-
-            </ScrollView>
         </View>
     );
 };
@@ -115,3 +60,66 @@ const styles = StyleSheet.create({
 });
 
 export default ScrollLimitExample;
+// {/* <ScrollView
+//     // ref={scrollViewRef}
+//     onScroll={handleScroll} // Attach the scroll handler
+//     scrollEventThrottle={16} // Ensures smooth scrolling updates
+//     style={styles.scrollView}
+// >
+//     {/* Content goes here */}
+//     <View style={styles.content}>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>Scroll Down to See More</Text>
+//         <Text style={styles.text}>You've reached the scroll limit! Scrolling up will be restricted beyond this point.</Text>
+//         <View style={styles.separator} />
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+//         <Text style={styles.text}>More content after the scroll limit</Text>
+
+//         <Text style={styles.text}>More content after the  limit</Text>
+
+//     </View>
+
+// </ScrollView> */}
