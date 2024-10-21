@@ -1,62 +1,62 @@
 import { View, Text, TouchableOpacity, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
-import { useOAuth } from "@clerk/clerk-expo";
 import GoogleButton from "../../components/GoogleButton"
 import { removeItem } from "@/utils/asyncStorage"
 import { images } from "@/constants"
-import { useCallback, useEffect, useState } from "react";
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
-import * as Google from 'expo-auth-session/providers/google'
-import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential, getAuth } from 'firebase/auth'
-import { app } from '@/firebaseConfig'
-import { google } from "googleapis";
+import { useState } from "react";
+import { scale, verticalScale } from 'react-native-size-matters';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/app'
+
 
 
 WebBrowser.maybeCompleteAuthSession()
 
 const Register = () => {
-    const auth = getAuth(app);
-    const androidClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID
-    const [userInfo, setUserInfo] = useState();
-    const [request, response, promptAsync] = Google.useAuthRequest({
-        androidClientId: androidClientId
-    })
+    GoogleSignin.configure({
+        webClientId: '937166693863-n78cvs2r3v3bcto5cbmpaoen63td9co8.apps.googleusercontent.com',
+    });
+    // const auth = getAuth(app);
+    // const androidClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID
+    // const [userInfo, setUserInfo] = useState();
+    // const [request, response, promptAsync] = Google.useAuthRequest({
+    //     androidClientId: androidClientId
+    // })
 
     const [loadingGoogle, setLoadingGoogle] = useState<Boolean>(false)
-    useEffect(() => {
-        void WebBrowser.warmUpAsync()
+    // useEffect(() => {
+    //     void WebBrowser.warmUpAsync()
 
-        if (response?.type === 'success') {
-            const { id_token } = response.params;
-            const credential = GoogleAuthProvider.credential(id_token);
-            signInWithCredential(auth, credential)
-        }
+    //     if (response?.type === 'success') {
+    //         const { id_token } = response.params;
+    //         const credential = GoogleAuthProvider.credential(id_token);
+    //         signInWithCredential(auth, credential)
+    //     }
 
-        return () => {
-            void WebBrowser.coolDownAsync()
-        }
+    //     return () => {
+    //         void WebBrowser.coolDownAsync()
+    //     }
 
-    }, [response])
+    // }, [response])
 
-    const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
-    const onPress = useCallback(async () => {
-        setLoadingGoogle((prev) => { return !prev })
-        try {
-            const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-                redirectUrl: Linking.createURL('/home', { scheme: 'myapp' }),
-            })
+    // const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' })
+    // const onPress = useCallback(async () => {
+    //     setLoadingGoogle((prev) => { return !prev })
+    //     try {
+    //         const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
+    //             redirectUrl: Linking.createURL('/home', { scheme: 'myapp' }),
+    //         })
 
-            if (createdSessionId) {
-                setActive!({ session: createdSessionId })
-            } else {
-                // Use signIn or signUp for next steps such as MFA
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }, [])
+    //         if (createdSessionId) {
+    //             setActive!({ session: createdSessionId })
+    //         } else {
+    //             // Use signIn or signUp for next steps such as MFA
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }, [])
 
     const handleReset = () => {
         removeItem('onboarded')
