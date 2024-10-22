@@ -3,7 +3,7 @@ import Onboarding from 'react-native-onboarding-swiper';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import LottieView from 'lottie-react-native';
 import { router } from "expo-router";
-import { setItem } from "@/utils/asyncStorage";
+import { setItem } from "@/utils/secureStore";
 const OnBoarding = () => {
 
     const handleDone = () => {
@@ -39,7 +39,7 @@ const OnBoarding = () => {
                                 {/* <LottieView style={{ height: verticalScale(300), width: scale(270) }} source={require('@/assets/animation/youtube.json')} autoPlay loop /> */}
                                 <Text>
                                     currently working on it
-                                    
+
                                 </Text>
                             </View>
                         ),

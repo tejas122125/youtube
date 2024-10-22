@@ -2,27 +2,38 @@ import 'react-native-gesture-handler'
 
 import { Redirect } from "expo-router"
 import { useEffect, useState } from "react"
+import { getItem, getUser } from '@/utils/secureStore'
 
-import { GetItem } from '../utils/asyncStorage'
-import { useAuth } from "@clerk/clerk-expo"
 const Home = () => {
-    return <Redirect href={'/(auth)/register'}/>
-    // const { isSignedIn } = useAuth()
-    // const [onBoarded, setOnBoarded] = useState<Boolean | null>(null)
 
-    // const checkOnboarding = async () => {
-    //     const value = await GetItem('onboarded')
-    //     if (value === '1') {
-    //         setOnBoarded(true)
-    //     }
-    //     else {
-    //         setOnBoarded(false)
-    //     }
-    // }
+    const [onBoarded, setOnBoarded] = useState<Boolean | null>(null)
 
-    // useEffect(() => {
-    //     checkOnboarding()
-    // }, [onBoarded])
+    const checkOnboarding = async () => {
+        const value = await getItem('onboarded')
+        if (value === '1') {
+            setOnBoarded(true)
+        }
+        else {
+            setOnBoarded(false)
+        }
+    }
+
+    const checkSignedIn = async () => {
+        const userInfo = await getUser()
+        if (userInfo == null) {
+            <Redirect href={'/(auth)/register'} />
+        }
+        else {
+
+        }
+    }
+
+
+
+    useEffect(() => {
+        checkOnboarding()
+        checkSignedIn()
+    }, [onBoarded])
 
 
     // if (onBoarded == null) {
@@ -43,7 +54,7 @@ const Home = () => {
     //         return <Redirect href={'/(auth)/register'} />
 
     //     }
-     
+
     // }
 }
 export default Home

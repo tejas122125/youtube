@@ -2,12 +2,12 @@ import { View, Text, TouchableOpacity, Image } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import * as WebBrowser from 'expo-web-browser'
 import GoogleButton from "../../components/GoogleButton"
-import { removeItem } from "@/utils/asyncStorage"
 import { images } from "@/constants"
 import { useEffect, useState } from "react";
 import { scale, verticalScale } from 'react-native-size-matters';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'
+import { removeItem, saveUser } from "@/utils/secureStore"
 
 
 WebBrowser.maybeCompleteAuthSession()
@@ -18,36 +18,18 @@ const Register = () => {
             webClientId: '937166693863-n78cvs2r3v3bcto5cbmpaoen63td9co8.apps.googleusercontent.com',
             scopes: ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner', 'https://www.googleapis.com/auth/yt-analytics.readonly', 'https://www.googleapis.com/auth/yt-analytics-monetary.readonly', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile',
             ],
-            offlineAccess: false,
+            offlineAccess: true,
         });
     }, [])
 
-    async function onGoogleButtonPress() {
-        // Check if your device supports Google Play
-        console.log("indisde ion google button press");
 
-        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-        // Get the users ID token
-        console.log("herer");
-
-        const { data } = await GoogleSignin.signIn()
-        const idToken = data?.idToken
-
-        // Create a Google credential with the token
-        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-        // Sign-in the user with the credential
-        auth().signInWithCredential(googleCredential);
-        console.log(data?.user, 'dhnfj');
-        return
-    }
     const signIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-
             console.log('User Info:', userInfo);
             auth()
+            await saveUser(userInfo)
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // User cancelled the login flow
