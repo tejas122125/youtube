@@ -4,19 +4,67 @@ import * as WebBrowser from 'expo-web-browser'
 import GoogleButton from "../../components/GoogleButton"
 import { removeItem } from "@/utils/asyncStorage"
 import { images } from "@/constants"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { scale, verticalScale } from 'react-native-size-matters';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/app'
-
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth'
 
 
 WebBrowser.maybeCompleteAuthSession()
 
 const Register = () => {
-    GoogleSignin.configure({
-        webClientId: '937166693863-n78cvs2r3v3bcto5cbmpaoen63td9co8.apps.googleusercontent.com',
-    });
+    useEffect(() => {
+        GoogleSignin.configure({
+            webClientId: '937166693863-n78cvs2r3v3bcto5cbmpaoen63td9co8.apps.googleusercontent.com',
+            scopes: ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner', 'https://www.googleapis.com/auth/yt-analytics.readonly', 'https://www.googleapis.com/auth/yt-analytics-monetary.readonly', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile',
+            ],
+            offlineAccess: false,
+        });
+    }, [])
+
+    async function onGoogleButtonPress() {
+        // Check if your device supports Google Play
+        console.log("indisde ion google button press");
+
+        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+        // Get the users ID token
+        console.log("herer");
+
+        const { data } = await GoogleSignin.signIn()
+        const idToken = data?.idToken
+
+        // Create a Google credential with the token
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+        // Sign-in the user with the credential
+        auth().signInWithCredential(googleCredential);
+        console.log(data?.user, 'dhnfj');
+        return
+    }
+    const signIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+
+            console.log('User Info:', userInfo);
+            auth()
+        } catch (error: any) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // User cancelled the login flow
+                console.log('User cancelled the login process');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // Operation (e.g. sign in) is in progress already
+                console.log('Sign in operation in progress');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // Play services not available or outdated
+                console.log('Google Play Services not available');
+            } else {
+                // Some other error
+                console.log('Some error occurred during sign in:', error);
+            }
+        }
+
+    }
     // const auth = getAuth(app);
     // const androidClientId = process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID
     // const [userInfo, setUserInfo] = useState();
@@ -63,10 +111,10 @@ const Register = () => {
     }
 
 
-    
+
     return (
         <SafeAreaView className=" flex-1">
-            <TouchableOpacity className="w-12 h-12 bg-red-500 absolute z-10 top-10" onPress={handleReset}>
+            <TouchableOpacity className="w-12 h-12 bg-red-500 absolute z-10 top-10" onPress={() => handleReset}>
                 <Text >
                     RESET
                 </Text>
@@ -80,7 +128,11 @@ const Register = () => {
 
                     <View className="bg-red-300 w-full h-full flex-col  justify-start items-center rounded-t-3xl" style={{ paddingTop: verticalScale(20), paddingHorizontal: scale(10), gap: verticalScale(50) }} >
                         <Text className="text-3xl text-white font-extrabold font-mono text-left">Register your youtube account with google</Text>
-                        <GoogleButton loading={loadingGoogle} onPress={promptAsync} />
+                        <GoogleButton loading={loadingGoogle} onPress={() => {
+                            console.log("first");
+
+                            signIn()
+                        }} />
 
                     </View>
                 </View>
