@@ -6,13 +6,7 @@ export const saveUser = async (userInfo:object) => {
 
 export const getUser = async () => {
   const userInfo = await SecureStore.getItemAsync('userInfo');
-  if (userInfo == null){
-    return null
-  }
-  else {
-  return JSON.parse(userInfo);
-
-  }
+return userInfo
 };
 
 export const removeUser = async () => {

@@ -7,7 +7,7 @@ import { getItem, getUser } from '@/utils/secureStore'
 const Home = () => {
 
     const [onBoarded, setOnBoarded] = useState<Boolean | null>(null)
-
+    const [isSignedIn, setSignedIn] = useState(false)
     const checkOnboarding = async () => {
         const value = await getItem('onboarded')
         if (value === '1') {
@@ -20,23 +20,40 @@ const Home = () => {
 
     const checkSignedIn = async () => {
         const userInfo = await getUser()
-        if (userInfo == null) {
-            <Redirect href={'/(auth)/register'} />
+        console.log("first");
+
+        if (userInfo === null) {
+            console.log("monu");
+            setSignedIn(false)
+
         }
         else {
+            // Store in zustand store
+            console.log("momoi");
+            setSignedIn(true)
+
 
         }
     }
 
 
-
     useEffect(() => {
         checkOnboarding()
         checkSignedIn()
-    }, [onBoarded])
+    }, [])
+
+if (isSignedIn){
+    return <Redirect href={'/(tabs)/home'} />
+
+}
+else{
+    return <Redirect href={'/(auth)/register'} />
+
+}
+   
 
 
-    // if (onBoarded == null) {
+// if (onBoarded == null) {
     //     return null
     // }
     // if (!onBoarded) {

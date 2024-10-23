@@ -7,13 +7,18 @@ import { useEffect, useState } from "react";
 import { scale, verticalScale } from 'react-native-size-matters';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth'
+import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
 import { removeItem, saveUser } from "@/utils/secureStore"
-
+// import { appConfig } from "@/firebaseConfig"
+// import firebase from 'firebase/app';
+import { appfire } from "@/firebaseConfig"
 
 WebBrowser.maybeCompleteAuthSession()
 
 const Register = () => {
     useEffect(() => {
+
+
         GoogleSignin.configure({
             webClientId: '937166693863-n78cvs2r3v3bcto5cbmpaoen63td9co8.apps.googleusercontent.com',
             scopes: ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner', 'https://www.googleapis.com/auth/yt-analytics.readonly', 'https://www.googleapis.com/auth/yt-analytics-monetary.readonly', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile',
@@ -21,15 +26,49 @@ const Register = () => {
             offlineAccess: true,
         });
     }, [])
+    // async function onGoogleButtonPress() {
+    //     firebase.initializeApp();
+    //     // Check if your device supports Google Play
+    //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    //     // Get the users ID token
+    //     const { data } = await GoogleSignin.signIn();
 
+    //     // Create a Google credential with the token
+    //     const googleCredential = auth.GoogleAuthProvider.credential(data?.idToken!);
+    //     // auth(app)
+
+    //     // Sign-in the user with the credential
+    //     try {
+    //         auth().signInWithCredential(googleCredential);
+
+    //     } catch (error) {
+    //         console.log(error);
+
+    //     }
+    //     await saveUser(data?.user!)
+    //     console.log("google ", data?.user);
+
+    // }
 
     const signIn = async () => {
         try {
+            // const auth = getAuth(app)
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
             console.log('User Info:', userInfo);
-            auth()
+            const auth = getAuth(appfire, {
+                persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+            }); // Get the Firebase Auth instance
+            const googleCredential = GoogleAuthProvider.credential(userInfo.data?.idToken);
+            // const googleCredential = appfire.auth.GoogleAuthProvider.credential(userInfo.data?.idToken);
+            // auth()
+            const userCredential = await signInWithCredential(auth, googleCredential);
+
+            // User is signed in
+            console.log('Firebase User:', userCredential.user);
             await saveUser(userInfo)
+
+
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // User cancelled the login flow
