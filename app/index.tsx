@@ -7,7 +7,7 @@ import { getItem, getUser } from '@/utils/secureStore'
 const Home = () => {
 
     const [onBoarded, setOnBoarded] = useState<Boolean | null>(null)
-    const [isSignedIn, setSignedIn] = useState(false)
+    const [isSignedIn, setSignedIn] = useState<boolean|null>(null)
     const checkOnboarding = async () => {
         const value = await getItem('onboarded')
         if (value === '1') {
@@ -18,42 +18,51 @@ const Home = () => {
         }
     }
 
-    const checkSignedIn = async () => {
-        const userInfo = await getUser()
-        console.log("first");
 
-        if (userInfo === null) {
-            console.log("monu");
-            setSignedIn(false)
-
-        }
-        else {
-            // Store in zustand store
-            console.log("momoi");
-            setSignedIn(true)
-
-
-        }
-    }
 
 
     useEffect(() => {
-        checkOnboarding()
+        // checkOnboarding()
+        const checkSignedIn = async () => {
+            const userInfo = await getUser()
+            const user = JSON.parse(userInfo!)
+            console.log("inside check signin");
+
+            if (user === null) {
+                console.log("monu");
+                // return false
+                setSignedIn(false)
+
+            }
+            else {
+                console.log(user);
+                
+                // Store in zustand store
+                console.log("momoi");
+                // return true
+             setSignedIn(true)
+
+
+            }
+        }
         checkSignedIn()
     }, [])
 
-if (isSignedIn){
-    return <Redirect href={'/(tabs)/home'} />
+    // if (isSignedIn) {
+    //     console.log("inside if statement");
 
-}
-else{
-    return <Redirect href={'/(auth)/register'} />
+    //     return <Redirect href={'/(tabs)/home'} />
 
-}
-   
+    // }
+    // else {
+    //     return <Redirect href={'/(auth)/register'} />
+
+    // }
+
+    return !isSignedIn ? <Redirect href={'/(auth)/register'} /> : <Redirect href={'/(auth)/register'} />
 
 
-// if (onBoarded == null) {
+    // if (onBoarded == null) {
     //     return null
     // }
     // if (!onBoarded) {

@@ -6,6 +6,7 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { useUser, useClerk } from "@clerk/clerk-expo";
 import { images } from "@/constants";
+import { logOut } from "@/lib/fetchData";
 
 
 const CustomDrawer = (props: any) => {
@@ -56,7 +57,9 @@ const CustomDrawer = (props: any) => {
                 padding: 20,
                 paddingBottom: 20 + bottom
             }}>
-                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: scale(20), }} onPress={handleSignOut} >
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: scale(20), }} onPress={() => {
+                    logOut()
+                }} >
                     <Image source={images.logout} style={{ height: scale(30), width: scale(30) }} />
                     <Text style={{ color: 'white', fontWeight: 'bold', fontSize: scale(16) }}>
                         Logout

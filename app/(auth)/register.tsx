@@ -6,16 +6,21 @@ import { images } from "@/constants"
 import { useEffect, useState } from "react";
 import { scale, verticalScale } from 'react-native-size-matters';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth'
 import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
 import { removeItem, saveUser } from "@/utils/secureStore"
 // import { appConfig } from "@/firebaseConfig"
 // import firebase from 'firebase/app';
-import { appfire } from "@/firebaseConfig"
-
+import { appfire,auth } from "@/firebaseConfig"
+import { fetchYouTubeAnalyticsData, logOut } from "@/lib/fetchData"
+import { Button } from "react-native-paper"
+import { initializeAuth } from 'firebase/auth';
+import * as firebaseAuth from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 WebBrowser.maybeCompleteAuthSession()
 
 const Register = () => {
+    const reactNativePersistence = (firebaseAuth as any).getReactNativePersistence;
     useEffect(() => {
 
 
@@ -24,6 +29,7 @@ const Register = () => {
             scopes: ['https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtubepartner', 'https://www.googleapis.com/auth/yt-analytics.readonly', 'https://www.googleapis.com/auth/yt-analytics-monetary.readonly', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile',
             ],
             offlineAccess: true,
+        
         });
     }, [])
     // async function onGoogleButtonPress() {
@@ -55,19 +61,25 @@ const Register = () => {
             // const auth = getAuth(app)
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            console.log('User Info:', userInfo);
-            const auth = getAuth(appfire, {
-                persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-            }); // Get the Firebase Auth instance
+            // console.log('User Info:', userInfo);
+            const accessToken = userInfo.data?.idToken!
+            // const auth = getAuth(appfire); // Get the Firebase Auth instance
+            //  const auth = initializeAuth(appfire, {
+            //     persistence: reactNativePersistence(AsyncStorage),
+            // });
             const googleCredential = GoogleAuthProvider.credential(userInfo.data?.idToken);
             // const googleCredential = appfire.auth.GoogleAuthProvider.credential(userInfo.data?.idToken);
             // auth()
             const userCredential = await signInWithCredential(auth, googleCredential);
-
             // User is signed in
-            console.log('Firebase User:', userCredential.user);
-            await saveUser(userInfo)
+            // console.log('Firebase User:', userCredential.user);
+            // const accessToken1 = getAuth(appfire).currentUser?.getIdToken(true)
+            const accessToken1 = auth.currentUser?.getIdToken(true)
 
+            console.log(accessToken);
+
+            fetchYouTubeAnalyticsData(accessToken)
+            await saveUser(userCredential.user)
 
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -154,6 +166,13 @@ const Register = () => {
 
                             signIn()
                         }} />
+                        <TouchableOpacity onPress={async () => {
+                            await logOut()
+                        }}>
+                            <Text>
+                                Logot
+                            </Text>
+                        </TouchableOpacity>
 
                     </View>
                 </View>
